@@ -2,10 +2,6 @@ from time import time
 from queue import PriorityQueue
 
 class State:
-    goal = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
-    # this should be changed manually based on n
-    # e.g. it should be [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0] if n is 4.
-    
     AStar_evaluation = None
     heuristic = None
 
@@ -14,6 +10,7 @@ class State:
         self.parent = parent
         self.direction = direction
         self.depth = depth
+        self.goal = list(range(1, nSize*nSize)) + [0]
 
         if parent:
             self.cost = parent.cost + cost
@@ -35,25 +32,11 @@ class State:
             # manhattan distance between the current state and goal state
             self.heuristic = self.heuristic + distance/n + distance % n
 
-        self.greedy_evaluation = self.heuristic
+        # self.greedy_evaluation = self.heuristic
         self.AStar_evaluation = self.heuristic + self.cost
 
-        return (self.greedy_evaluation, self.AStar_evaluation)
-
-    # heuristic function based on number of misplaced tiles
-    def Misplaced_Tiles(self, n):
-        counter = 0
-        self.heuristic = 0
-        for i in range(n*n):
-            for j in range(n*n):
-                if (self.state[i] != self.goal[j]):
-                    counter += 1
-                self.heuristic = self.heuristic + counter
-
-        self.greedy_evaluation = self.heuristic
-        self.AStar_evaluation = self.heuristic + self.cost
-
-        return (self.greedy_evaluation, self.AStar_evaluation)
+        # return (self.greedy_evaluation, self.AStar_evaluation)
+        return self.AStar_evaluation
 
     @staticmethod
     # this would remove illegal moves for a given state
@@ -110,9 +93,8 @@ def AStar_search(given_state, n):
     explored = []
     counter = 0
     root = State(given_state, None, None, 0, 0)
-    # we can use Misplaced_Tiles() instead.
     evaluation = root.Manhattan_Distance(n)
-    frontier.put((evaluation[1], counter, root))  # based on A* evaluation
+    frontier.put((evaluation, counter, root))  # based on A* evaluation
 
     while not frontier.empty():
         current_node = frontier.get()
@@ -129,15 +111,16 @@ def AStar_search(given_state, n):
                 # we can use Misplaced_Tiles() instead.
                 evaluation = child.Manhattan_Distance(n)
                 # based on A* evaluation
-                frontier.put((evaluation[1], counter, child))
+                frontier.put((evaluation, counter, child))
     return
 
 
 # initial state
-n = int(input("Enter n\n"))
-print("Enter your", n, "*", n, "puzzle")
+global nSize
+nSize = int(input("Enter n\n"))
+print("Enter your", nSize, "*", nSize, "puzzle")
 root = []
-for i in range(0, n*n):
+for i in range(0, nSize*nSize):
     p = int(input())
     root.append(p)
 
@@ -170,7 +153,7 @@ if solvable(root):
     print("Solvable, please wait. \n")
 
     time4 = time()
-    AStar_solution = AStar_search(root, n)
+    AStar_solution = AStar_search(root, nSize)
     AStar_time = time() - time4
     print('A* Solution is ', AStar_solution[0])
     print('Number of explored nodes is ', AStar_solution[1])
