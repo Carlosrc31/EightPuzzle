@@ -95,4 +95,3 @@ while first_visited_state[iteraciones] != goal_state[0] and iteraciones <= 10000
 print("Se terminó")
 print(first_visited_state[iteraciones])
 print(goal_state[0])
-#print(first_visited_state)

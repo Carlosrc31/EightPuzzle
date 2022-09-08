@@ -18,28 +18,23 @@ class State:
         else:
             self.cost = cost
 
-    def test(self):  # check if the given state is goal
+    def test(self): 
         if self.state == self.goal:
             return True
         return False
 
-    # heuristic function based on Manhattan distance
     def Manhattan_Distance(self, n):
         self.heuristic = 0
         for i in range(1, n*n):
             distance = abs(self.state.index(i) - self.goal.index(i))
 
-            # manhattan distance between the current state and goal state
             self.heuristic = self.heuristic + distance/n + distance % n
 
-        # self.greedy_evaluation = self.heuristic
         self.AStar_evaluation = self.heuristic + self.cost
 
-        # return (self.greedy_evaluation, self.AStar_evaluation)
         return self.AStar_evaluation
 
     @staticmethod
-    # this would remove illegal moves for a given state
     def available_moves(x, n):
         moves = ['Left', 'Right', 'Up', 'Down']
         if x % n == 0:
@@ -53,7 +48,6 @@ class State:
 
         return moves
 
-    # produces children of a given state
     def expand(self, n):
         x = self.state.index(0)
         moves = self.available_moves(x, n)
@@ -70,11 +64,8 @@ class State:
             elif direction == 'Down':
                 temp[x], temp[x + n] = temp[x + n], temp[x]
 
-            # depth should be changed as children are produced
             children.append(State(temp, self, direction, self.depth + 1, 1))
         return children
-
-    # gets the given state and returns it's direction + it's parent's direction till there is no parent
 
     def solution(self):
         solution = []
@@ -94,7 +85,7 @@ def AStar_search(given_state, n):
     counter = 0
     root = State(given_state, None, None, 0, 0)
     evaluation = root.Manhattan_Distance(n)
-    frontier.put((evaluation, counter, root))  # based on A* evaluation
+    frontier.put((evaluation, counter, root))  
 
     while not frontier.empty():
         current_node = frontier.get()
@@ -108,14 +99,11 @@ def AStar_search(given_state, n):
         for child in children:
             if child.state not in explored:
                 counter += 1
-                # we can use Misplaced_Tiles() instead.
                 evaluation = child.Manhattan_Distance(n)
-                # based on A* evaluation
                 frontier.put((evaluation, counter, child))
     return
 
 
-# initial state
 global nSize
 nSize = int(input("Enter n\n"))
 print("Enter your", nSize, "*", nSize, "puzzle")
@@ -127,7 +115,6 @@ for i in range(0, nSize*nSize):
 print("The given state is:", root)
 
 
-# count the number of inversions
 def inv_num(puzzle):
     inv = 0
     for i in range(len(puzzle)-1):
@@ -137,7 +124,6 @@ def inv_num(puzzle):
     return inv
 
 
-# check if initial state puzzle is solvable: number of inversions should be even.
 def solvable(puzzle):
     inv_counter = inv_num(puzzle)
     if (inv_counter % 2 == 0):
@@ -145,12 +131,8 @@ def solvable(puzzle):
     return False
 
 
-#1,8,2,0,4,3,7,6,5 is solvable
-#2,1,3,4,5,6,7,8,0 is not solvable
-
-
 if solvable(root):
-    print("Solvable, please wait. \n")
+    print("There is solution, please wait. \n")
 
     time4 = time()
     AStar_solution = AStar_search(root, nSize)
@@ -161,4 +143,4 @@ if solvable(root):
 
 
 else:
-    print("Not solvable")
+    print("There is not solution")
