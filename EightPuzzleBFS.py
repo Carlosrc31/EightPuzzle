@@ -12,27 +12,6 @@ goal_state = [[
     [7, 8, 0]
 ]]
 
-test = [
-    [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 0]
-    ],
-    [
-    [3, 4, 2],
-    [5, 6, 1],
-    [2, 7, 0]
-    ]
-]
-
-# new_list = list(set(_test))
-# print(new_list)
-# aux = 0
-# for n in test:
-#     for i in range(0,3):
-#         print(test[aux][i])
-#     aux = aux + 1
-
 
 print("\t Initial state")
 for i in range(0,1):
@@ -54,11 +33,6 @@ first_visited_state = copy.deepcopy(initial_state)
 #Breath-First Search
 iteraciones = 0
 
-# print(test[0])
-# print(goal_state[0])
-# print(test[0] == goal_state[0])
-
-#Goal_reached = (false)
 
 while first_visited_state[iteraciones] != goal_state[0] and iteraciones <= 10000:
 
@@ -119,7 +93,6 @@ while first_visited_state[iteraciones] != goal_state[0] and iteraciones <= 10000
     print(first_visited_state[iteraciones]) 
 
 print("Se terminó")
-#print(Goal_reached)
 print(first_visited_state[iteraciones])
 print(goal_state[0])
 #print(first_visited_state)
